@@ -11,7 +11,7 @@
                 <constraints primaryKey="true" nullable="false"></constraints>
             </column>
             <column name="username" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints nullable="false" unique="true" uniqueConstraintName="users_username_uk"/>
             </column>
         </createTable>
     </changeSet>

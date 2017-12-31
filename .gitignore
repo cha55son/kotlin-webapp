@@ -1,0 +1,4 @@
+*.sqlite
+*.iml
+.idea/
+target/

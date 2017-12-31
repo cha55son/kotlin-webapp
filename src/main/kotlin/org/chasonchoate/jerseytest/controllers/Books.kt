@@ -1,6 +1,5 @@
 package org.chasonchoate.jerseytest.controllers
 
-import org.pac4j.core.context.DefaultAuthorizers
 import org.pac4j.jax.rs.annotations.Pac4JSecurity
 import javax.ws.rs.GET
 import javax.ws.rs.Path
@@ -12,7 +11,7 @@ class Books {
     var counter = 0
 
     @GET
-    @Pac4JSecurity(authorizers = [DefaultAuthorizers.IS_AUTHENTICATED])
+    @Pac4JSecurity(authorizers = ["isAuthenticated"])
     @Produces(MediaType.TEXT_PLAIN)
     fun books(): String {
         counter++
