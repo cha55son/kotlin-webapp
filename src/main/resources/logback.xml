@@ -8,7 +8,8 @@
     </appender>
 
     <logger name="org.chasonchoate" level="TRACE"/>
-
+    <logger name="org.eclipse.jetty" level="INFO"/>
+    <logger name="org.eclipse.jetty.server.Server" level="DEBUG"/>
 
     <root level="debug">
         <appender-ref ref="STDOUT" />

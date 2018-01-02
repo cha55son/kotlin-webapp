@@ -15,9 +15,11 @@
         <kotlin.version>1.2.10</kotlin.version>
         <junit.version>4.12</junit.version>
         <jetty.version>9.4.8.v20171121</jetty.version>
-        <jersey.version>2.26</jersey.version>
+        <jersey.version>2.25.1</jersey.version>
         <pac4j.version>2.2.1</pac4j.version>
         <jaxrs-pac4j.version>2.1.0</jaxrs-pac4j.version>
+        <!-- Pac4J will use this for password encoding -->
+        <shiro.version>1.4.0</shiro.version>
         <liquibase.version>3.5.3</liquibase.version>
         <sqlite.version>3.21.0.1</sqlite.version>
         <exposed.version>0.9.1</exposed.version>
@@ -88,6 +90,11 @@
             <groupId>org.pac4j</groupId>
             <artifactId>jax-rs-pac4j</artifactId>
             <version>${jaxrs-pac4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>${shiro.version}</version>
         </dependency>
         <dependency>
             <groupId>org.xerial</groupId>

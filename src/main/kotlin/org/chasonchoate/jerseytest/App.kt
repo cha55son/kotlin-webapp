@@ -1,7 +1,10 @@
 package org.chasonchoate.jerseytest
 
+import org.chasonchoate.jerseytest.auth.SimpleAuthenticator
 import org.chasonchoate.jerseytest.controllers.Books
 import org.chasonchoate.jerseytest.controllers.Root
+import org.chasonchoate.jerseytest.controllers.Sessions
+import org.chasonchoate.jerseytest.controllers.Users
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.servlet.ServletContextHandler
 import org.eclipse.jetty.servlet.ServletHolder
@@ -20,6 +23,9 @@ import java.sql.Connection
 import java.util.*
 import org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator
 import org.pac4j.http.client.direct.DirectFormClient
+import org.pac4j.http.client.indirect.FormClient
+import org.pac4j.http.client.indirect.IndirectBasicAuthClient
+import org.pac4j.jax.rs.jersey.features.Pac4JValueFactoryProvider
 import org.slf4j.LoggerFactory
 
 
@@ -33,6 +39,8 @@ class App {
              */
             log.debug("Registering controllers...")
             config.register(Root())
+            config.register(Users())
+            config.register(Sessions())
             config.register(Books())
             log.debug("Finished registering controllers")
         }
@@ -40,19 +48,25 @@ class App {
         private fun registerAuthentication(config: ResourceConfig) {
             log.debug("Registering authentication...")
             val auth = SimpleTestUsernamePasswordAuthenticator()
-            val formClient = DirectFormClient(auth)
-            val basicAuthClient = DirectBasicAuthClient(auth)
+            val loginClient = FormClient("/sessions/new", SimpleAuthenticator())
+            loginClient.name = "LoginClient"
+            // Basic auth will NOT create sessions
+//            val basicAuthClient = DirectBasicAuthClient(auth)
+//            basicAuthClient.name = "BasicAuthClient"
 
-            val clients = Clients("notUsedCallbackUrl", listOf(basicAuthClient, formClient))
+            val clients = Clients("notUsedCallbackUrl", listOf(loginClient /* , basicAuthClient */))
             clients.urlResolver = JaxRsUrlResolver()
+            // Needs to be set so that the Pac4JCallback annotation loads the proper client without having to provide a `?client_name=xxx` param.
+            clients.defaultClient = loginClient
             val authConfig = JaxRsConfig()
             authConfig.clients = clients
-            authConfig.defaultClients = "DirectBasicAuthClient"
+            authConfig.defaultClients = arrayOf(/* basicAuthClient.name, */ loginClient.name).joinToString(",")
 
             config
                 .register(JaxRsConfigProvider(authConfig))
                 .register(ServletJaxRsContextFactoryProvider())
                 .register(Pac4JSecurityFeature())
+                .register(Pac4JValueFactoryProvider.Binder()) // only with Jersey <2.26
             log.debug("Finished registering authentication")
         }
 

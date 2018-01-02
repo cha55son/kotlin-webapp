@@ -13,6 +13,10 @@
             <column name="username" type="varchar(255)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="users_username_uk"/>
             </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="users_email_uk"/>
+            </column>
+            <column name="encrypted_password" type="varchar(255)"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>
